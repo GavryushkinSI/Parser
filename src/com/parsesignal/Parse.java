@@ -70,6 +70,7 @@ public class Parse {
     int status_5 = 0;
     int size = 0;
     static int [] x_toint=null;
+    static ArrayList<Integer> list=new ArrayList<Integer>();
 
 
     //Метод контроля коректности скрина
@@ -157,7 +158,7 @@ public class Parse {
 
     Rectangle selection;
     Point anchor;
-    boolean work;
+    static boolean work;
     int b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, m = 0;
     String condtext_1, condtext_2;
     Test test;
@@ -173,6 +174,8 @@ public class Parse {
 
     Trade tr;
     Thread mythread;
+    Thread mythread_val;
+    Thread mythread_val2;
 
 
     public static void main(String[] args) {
@@ -321,11 +324,14 @@ public class Parse {
 //        y=Arrays.stream(Stream.of(x).mapToInt(Integer::parseInt).toArray()).sum();
 //        }
 //        else {
-        System.out.println(Arrays.toString(x));
+        //System.out.println(Arrays.toString(x));
+        Martin mart=new Martin(dialog);
         x_toint = Stream.of(x).mapToInt(Integer::parseInt).toArray();
         for (int i = 0; i < Stream.of(x).mapToInt(Integer::parseInt).toArray().length-1; i++) {
             y+=x_toint[i]+x_toint[i+1];
-            System.out.println(y);
+            list.add(x_toint[i]+x_toint[i+1]);
+           System.out.println(list.get(i));
+            mart.coefficient();
         }
         if (y < 0)
             equity.setBackground(Color.red);
@@ -783,16 +789,24 @@ public class Parse {
         @Override
         public void mouseClicked(MouseEvent e) {
             frame.setBounds(1000,2,350,470);
-            Runnable run = new MyRunnable();
+            MyRunnable run = new MyRunnable();
             mythread = new Thread(run);
+            Validation val=new Validation(run,test,text);
+            ValidationRemote val2=new ValidationRemote(run,test);
             mythread.start();
+            mythread_val=new Thread(val);
+            mythread_val.start();
+            System.out.println("Поток валидации запущен");
+            mythread_val2=new Thread(val2);
+            mythread_val2.start();
+            System.out.println("Поток проверки уникальности пикселей сканируемого изображения запущен");
         }
     }
 
     public class MyRunnable implements Runnable {
         int count = 1;
-        int position=0;
-        int position_2=0;
+       public int position=0;
+         int position_2=0;
         int position_3=0;
         int position_4=0;
         int position_5=0;
@@ -803,7 +817,7 @@ public class Parse {
         int valuepix_2=0;
         int numpixels_3=0;
         int valuepix_3=0;
-        //int count_unique=0;
+        public int count_unique=1000;
         /*int numpixels_3=0;
         int valuepix_3=0;
         int numpixels_4=0;
@@ -811,6 +825,8 @@ public class Parse {
         //Переменные условий, учитывающие изменение координат цвета*********//
   /*      String quantitydef_1=dialog.getQuantitytext();
         String quantitydef_2=dialog.getQuantitytext_2();*/
+
+
 
 
         @Override
@@ -840,16 +856,11 @@ public class Parse {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    text.setText("Прерван поток!");
+                    text.setText("Прерван поток MyRunnable!");
+                    test.sendSignal("Прерван поток Myrunnable","");
                 }
 
-              /*  if (uniqueCount(pixels) == 0) {
-                    count_unique++;
-                    if (count_unique >=500) {
-                        test.sendSignal("FATAL ERROR", "Некорректное сканироваание: в сканируемом изображении не найденно ни одного дубликата");
-                        //System.out.println("Некорректное сканирование: в сканируемом изображении не найденно ни одного дубликата");
-                    }
-                }else{count_unique=0;}*/
+               count_unique=uniqueCount(pixels);
                 count++;
                 searchpixel(pixels);
                 /*Скрин в файл
@@ -1247,7 +1258,7 @@ public class Parse {
     /** КОД ДЛЯ ОТПРАВКИ СМС СООБЩЕНИЙ
      *
      */
-    public  class SMS {
+     public  class SMS {
 
         public SMS() {
         }
