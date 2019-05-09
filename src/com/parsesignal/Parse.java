@@ -26,7 +26,8 @@ import java.util.stream.Stream;
  * Created by Gavryushkin Stanislav  on 21.02.2018.
  * (rework 16.02.2019 add:Equity)
  * (rework 19.02.2019 add:Equity graph)
- * @version 2.4
+ * (rework 07.05.2019 add:Validation, ValidationRemote,Martin classes)
+ * @version 2.6
  */
 public class Parse {
 
@@ -329,9 +330,9 @@ public class Parse {
         x_toint = Stream.of(x).mapToInt(Integer::parseInt).toArray();
         for (int i = 0; i < Stream.of(x).mapToInt(Integer::parseInt).toArray().length-1; i++) {
             y+=x_toint[i]+x_toint[i+1];
-            list.add(x_toint[i]+x_toint[i+1]);
-           System.out.println(list.get(i));
-            mart.coefficient();
+//            list.add(x_toint[i]+x_toint[i+1]);
+//           System.out.println(list.get(i));
+//            mart.coefficient();
         }
         if (y < 0)
             equity.setBackground(Color.red);
@@ -694,8 +695,14 @@ public class Parse {
         equity.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                equity.setText(String.valueOf(read_file("data.txt")));
-                new LineChart1("Equity").create_graphics();
+                try {
+                    equity.setText(String.valueOf(read_file("data.txt")));
+                    new LineChart1("Equity").create_graphics();
+                }
+                catch(Exception ex){
+                    equity.setText("0");
+                    equity.setBackground(Color.BLUE);
+                }
             }
         });
         /*panel.add(martin);

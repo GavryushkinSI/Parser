@@ -10,18 +10,20 @@ import java.io.IOException;
 
 public class My_JMenuBar extends JMenuBar {
 
-     String []  items = {"Menu","clear Equity","martin"};
+     String []  items = {"Menu","   Clear Equity","Set Validation","   Martin"};
     JMenu menu = new JMenu(items[0]);
      JMenuItem item_1=new JMenuItem(items[1]);
     JMenuItem item_2=new JMenuItem(items[2]);
-     //JMenuItem item_2=new JMenuItem(items[2]);
-////    static  JMenuItem item_3=new JMenuItem(items[3]);
-//    static JMenuItem item_4=new JMenuItem(items[4]);
-//    static  JMenuItem item_5=new JMenuItem(items[5]);
+    JMenuItem item_3=new JMenuItem(items[3]);
+    static Checkbox check=new Checkbox("Set Validation");
+    public static boolean getCheck() {
+        return check.getState();
+    }
 
     public  My_JMenuBar() {
         super();
         this.add(create_menu());
+        check.setState(true);
     }
     public JMenu create_menu() {
         item_1.addActionListener(new ActionListener() {
@@ -33,6 +35,12 @@ public class My_JMenuBar extends JMenuBar {
             }
         });
         item_2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        item_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -56,12 +64,10 @@ public class My_JMenuBar extends JMenuBar {
 
             }
         });
+
         menu.add(item_1);
-        menu.add(item_2);
-//        menu.add(item_2);
-//        menu.add(item_3);
-//        menu.add(item_4);
-//        menu.add(item_5);
+        menu.add(item_2.add(check));
+        //menu.add(item_3);
         return menu;
     }
     void write_file(String path, String content) {
@@ -74,6 +80,5 @@ public class My_JMenuBar extends JMenuBar {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
