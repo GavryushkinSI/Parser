@@ -1,5 +1,4 @@
 package com.parsesignal;
-
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,6 +10,7 @@ import java.util.Calendar;
 
 //Проверяет соответсвие позиций в Quik  c позицией в ParseSignal. В случае разногласий отправляет сообщение на почту.
 public class Validation implements Runnable{
+    private static int count=0;
     public int getPoz_quik() {
         return poz_quik;
     }
@@ -19,40 +19,45 @@ public class Validation implements Runnable{
 
      Parse.MyRunnable run=null;
      Parse.Test obj=null;
+     Parse.Dialog dialog=null;
      JTextField text=null;
     Calendar c=Calendar.getInstance();
     DateFormat df=new SimpleDateFormat("u");
-    Validation(Parse.MyRunnable run, Parse.Test obj, JTextField text){
+    Validation(Parse.MyRunnable run, Parse.Test obj, Parse.Dialog dialog, JTextField text){
         this.run=run;
         this.obj=obj;
         this.text=text;
+        this.dialog=dialog;
     }
     @Override
     public void run() {
         boolean time=Integer.parseInt(df.format(c.getTime()))<=5;
         while(Parse.work!=false) {
-            System.out.println(My_JMenuBar.getCheck());
-            if (My_JMenuBar.getCheck() == true && time == true) {
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 poz_quik = read_file("val.txt");
-                //System.out.println(poz_quik);
-                if (run.position != poz_quik) {
-                    obj.sendSignal("Позиции  не совпадают, сделайте ручную корректировку.", "");
-
-                }
+                System.out.println(Parse.size);
+                if (Parse.size != poz_quik) {
+                    count++;
+                    if(count>=2) {
+                        obj.sendSignal("Позиции  не совпадают, сделайте ручную корректировку.", "");
+                        System.out.println("Позиции  не совпадают, сделайте ручную корректировку." + "COUNT: " + count);
+                    }
+               }
+               else{count=0;}
+//                System.out.println("COUNT: "+count);
                 try {
-                    Thread.sleep(100000);
+                    Thread.sleep(12000);
                 } catch (InterruptedException e) {
                     text.setText("Validation thread interrupted");
                     obj.sendSignal("Прерван поток Validation", "");
                 }
             }
         }
-    }
+
     int read_file(String path) {
         BufferedReader rd = null;
         String[] x = null;

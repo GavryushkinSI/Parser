@@ -31,7 +31,7 @@ public class My_JMenuBar extends JMenuBar {
             public void actionPerformed(ActionEvent e) {
 
                 write_file("data.txt","");
-                write_file("poz.txt","");
+                //write_file("poz.txt","");
             }
         });
         item_2.addActionListener(new ActionListener() {
@@ -40,33 +40,33 @@ public class My_JMenuBar extends JMenuBar {
 
             }
         });
-        item_3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                String x=JOptionPane.showInputDialog(new Frame(),"Укажите ряд мартингейла (например, 1;2;3;4)");
-                try {
-                    Martin.level = Integer.parseInt(JOptionPane.showInputDialog(new Frame(), "Укажите уровень (положительное число,либо 0)"));
-                }
-                catch (Exception ex){
-                    Martin.level=0;
-                }
-                try {
-                    String[] y = x.split(";");
-                    for (int i = 0; i < y.length; i++) {
-                        Martin.index.add(Integer.parseInt(y[i]));
-                    }
-                    System.out.println(Martin.index);
-                }
-                catch(Exception ex){
-
-                }
-
-            }
-        });
+//        item_3.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//                String x=JOptionPane.showInputDialog(new Frame(),"Укажите ряд мартингейла (например, 1;2;3;4)");
+//                try {
+//                    Martin.level = Integer.parseInt(JOptionPane.showInputDialog(new Frame(), "Укажите уровень (положительное число,либо 0)"));
+//                }
+//                catch (Exception ex){
+//                    Martin.level=0;
+//                }
+//                try {
+//                    String[] y = x.split(";");
+//                    for (int i = 0; i < y.length; i++) {
+//                        Martin.index.add(Integer.parseInt(y[i]));
+//                    }
+//                    System.out.println(Martin.index);
+//                }
+//                catch(Exception ex){
+//
+//                }
+//
+//            }
+//        });
 
         menu.add(item_1);
-        menu.add(item_2.add(check));
+//        menu.add(item_2.add(check));
         //menu.add(item_3);
         return menu;
     }

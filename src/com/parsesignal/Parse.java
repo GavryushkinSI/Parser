@@ -1,7 +1,9 @@
 package com.parsesignal;
 
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.imageio.ImageIO;
@@ -63,13 +65,14 @@ public class Parse {
     JButton equity;
     Dialog dialog, dialog_2;
     Checkbox def_cor;
-
+    volatile String price;
+    volatile String price_2, price_3;
     int status = 0;
     int status_2 = 0;
     int status_3 = 0;
     int status_4 = 0;
     int status_5 = 0;
-    int size = 0;
+    static int  size = 0;
     static int [] x_toint=null;
     static ArrayList<Integer> list=new ArrayList<Integer>();
 
@@ -79,11 +82,9 @@ public class Parse {
     //Парсинг цены с сайта
     public void getPrice() {
         new Thread(new Runnable() {
-
             @Override
             public void run() {
                 while (true) {
-
                     Document doc = null;
                     Document doc_2 = null;
                     try {
@@ -121,8 +122,8 @@ public class Parse {
                     }
                     //************////////////////////
                     price = String.valueOf((int) Double.parseDouble(map.get((String) dialog.cbFirst.getSelectedItem())));
-                    price_2 = String.valueOf((int) Double.parseDouble(map.get((String) dialog.cbSecond.getSelectedItem())));
-                    price_3 = String.valueOf((int) Double.parseDouble(map.get((String) dialog.cbThird.getSelectedItem())));
+                    //price_2 = String.valueOf((int) Double.parseDouble(map.get((String) dialog.cbSecond.getSelectedItem())));
+                    //price_3 = String.valueOf((int) Double.parseDouble(map.get((String) dialog.cbThird.getSelectedItem())));
                     //price=buffer.substring(buffer.indexOf("Si RUB "), buffer.indexOf("fSi") + 9).split("fSi ")[1];
                     //System.out.println(price);
                     System.out.println((String) dialog.cbFirst.getSelectedItem());
@@ -135,27 +136,22 @@ public class Parse {
                     System.out.println(map.get((String) dialog.cbThird.getSelectedItem()));
                     System.out.println("//**************************//");
                     if (work == false && size == 0) {
-                        text.setText("TS_1:" + ((String) dialog.cbFirst.getSelectedItem()) +
-                                map.get((String) dialog.cbFirst.getSelectedItem()) +
-                                " " + "TS_2:" + ((String) dialog.cbSecond.getSelectedItem()) +
-                                map.get((String) dialog.cbSecond.getSelectedItem()) + "TS_3:" + ((String) dialog.cbThird.getSelectedItem()) +
-                                map.get((String) dialog.cbThird.getSelectedItem()) + " 10 sec delay");
+                        text.setText("Pozition:" + ((String) dialog.cbFirst.getSelectedItem()) +
+                                map.get((String) dialog.cbFirst.getSelectedItem())+" delayed_15min");
                     }
                     buffer = null;
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(12000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
                 }
-
             }
         }).start();
     }
 
-    volatile String price;
-    volatile String price_2, price_3;
+
 
     Rectangle selection;
     Point anchor;
@@ -654,7 +650,7 @@ public class Parse {
                 */
                 tr.Order_B();
                 //status=1;
-                size=size+Integer.parseInt(dialog.getQuantitytext());
+                //size=size+Integer.parseInt(dialog.getQuantitytext());
                 text.setText("Покупка");
                 text.setText("Лотов в сделке: " +size+" Кол-во сделок "+ID);
             }
@@ -676,7 +672,7 @@ public class Parse {
                 */
                 tr.Order_S();
                 //status=-1;
-                size=size-Integer.parseInt(dialog.getQuantitytext());
+                //size=size-Integer.parseInt(dialog.getQuantitytext());
                 text.setText("Продажа");
                 text.setText("Лотов в сделке: " +size+" Кол-во сделок "+ID);
 
@@ -798,7 +794,7 @@ public class Parse {
             frame.setBounds(1000,2,350,470);
             MyRunnable run = new MyRunnable();
             mythread = new Thread(run);
-            Validation val=new Validation(run,test,text);
+            Validation val=new Validation(run,test,dialog,text);
             ValidationRemote val2=new ValidationRemote(run,test);
             mythread.start();
             mythread_val=new Thread(val);
@@ -858,10 +854,11 @@ public class Parse {
                     JOptionPane.showMessageDialog(frame,"Выделите область и нажмите кнопку START");
                 }
                 screenLabel_2.setIcon(image2);
-                text.setText("Скрин: " + count +" ID: "+ID+" TS_1"+":"+position*Integer.parseInt(dialog.getQuantitytext())+";"+" TS_2"+":"+position_2*Integer.parseInt(dialog.getQuantitytext_2())+";"+" TS_3"+":"+position_5*Integer.parseInt(dialog.getQuantitytext_3()));
+                //text.setText("Скрин: " + count +" ID: "+ID+" TS_1"+":"+position*Integer.parseInt(dialog.getQuantitytext())+";"+" TS_2"+":"+position_2*Integer.parseInt(dialog.getQuantitytext_2())+";"+" TS_3"+":"+position_5*Integer.parseInt(dialog.getQuantitytext_3()));
+                text.setText("Скрин: " + count +" ID: "+ID+" Position"+": "+size);
                 int[] pixels = copyFromBufferedImage(buf);
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(700);
                 } catch (InterruptedException e) {
                     text.setText("Прерван поток MyRunnable!");
                     test.sendSignal("Прерван поток Myrunnable","");
@@ -2298,6 +2295,7 @@ public class Parse {
             for (int i = 0; i < list.size(); i++) {
                 str += list.get(i) + "=" + pr.getProperty(list.get(i)) + "; ";
             }
+            size+=1;
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter("trade.tri", append = true));
                 writer.write(str + "\r\n");
@@ -2349,6 +2347,7 @@ public class Parse {
             pr.setProperty("QUANTITY", "1");
             for (int i = 0; i < list.size(); i++) {
                 str += list.get(i) + "=" + pr.getProperty(list.get(i)) + "; ";}
+            size+=-1;
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter("trade.tri", append = true));
                 writer.write(str + "\r\n");

@@ -7,9 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="jcommon-1.0.23" level="project" />
     <orderEntry type="library" name="javax.mail" level="project" />
-    <orderEntry type="library" name="jsoup-1.11.3" level="project" />
     <orderEntry type="library" name="JTattoo-1.6.11 (1)" level="project" />
+    <orderEntry type="library" name="jsoup-1.11.3" level="project" />
+    <orderEntry type="library" name="jcommon-1.0.23" level="project" />
+    <orderEntry type="library" name="jfreechart-1.0.19" level="project" />
   </component>
 </module>
