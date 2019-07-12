@@ -1,5 +1,4 @@
 ## Parser
-
 This program helps to automate trading absolutly free. It is possible due to the tradingview.com website functions. This programm is a great alternative to the  TSLAB (the leader of the automation of trading in Russia). But it has some disadvantages such as: -expensive enough (aprox. 6000 rubles a months) -programm  is not stable,  some errors occures, that are not catched and as a result user are not informed about it. 
 
 **Parsesignal**-программа, написанная на языке Java, предназначенная для отправки торговых сигналов в Quik.  
@@ -39,6 +38,6 @@ This program helps to automate trading absolutly free. It is possible due to the
 расширением .tri, который Quik считывает каждые 5 секунд. Для этого Quik  в разделе настроек
 надо указать расположение файлов расширений:.tri/.tro/.trr. 
 
-<li>[Официальный сайт проекта](http://parsesignal.tmweb.ru/)
+[Официальный сайт проекта](http://parsesignal.tmweb.ru/)
    
-<li>[Пост на хабре на тему создания программы Parse_Signal](https://habr.com/ru/post/447912/)
+[Пост на хабре на тему создания программы Parse_Signal](https://habr.com/ru/post/447912/)
